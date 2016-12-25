@@ -19,7 +19,14 @@ var App = React.createClass({
     }
   },
   componentDidMount: function () {
-    base.syncState(`${this.props.params.storeId}/fishes`,{context:this, state:'fishes'})
+    base.syncState(`${this.props.params.storeId}/fishes`,{context:this, state:'fishes'});
+    var localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`)
+    if(localStorageRef){
+      this.setState({order: JSON.parse(localStorageRef)})
+    }
+  },
+  componentWillUpdate: function (nextProps,nextState) {
+    localStorage.setItem(`order-${this.props.params.storeId}`, JSON.stringify(nextState.order));
   },
   addFish:function (fish) {
     var timeStamp = (+new Date())
